@@ -1,6 +1,6 @@
 
 Information{
-     Version = "1.0",
+     Version = "1.1",
      Description = "A simple vector library",
      Authors = {
      	"3uclidian",
