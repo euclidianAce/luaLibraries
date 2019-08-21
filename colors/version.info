@@ -1,0 +1,8 @@
+
+Information{
+     Version = "0.1",
+     Description = "Some functions for color interpolation",
+     Authors = {
+     	"3uclidian",
+     },
+}

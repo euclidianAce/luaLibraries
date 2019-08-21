@@ -1,0 +1,8 @@
+
+Information{
+     Version = "1.0",
+     Description = "A simple vector library",
+     Authors = {
+     	"3uclidian",
+     },
+}

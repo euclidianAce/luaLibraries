@@ -1,0 +1,8 @@
+
+Information{
+     Version = "1.0",
+     Description = "A simple complex number library",
+     Authors = {
+     	"3uclidian",
+     },
+}
