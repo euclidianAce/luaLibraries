@@ -1,0 +1,8 @@
+
+Information{
+     Version = "0.1",
+     Description = "A simple quaternion library",
+     Authors = {
+     	"3uclidian",
+     },
+}
