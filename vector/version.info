@@ -1,8 +1,12 @@
-
 Information{
-     Version = "1.1",
-     Description = "A simple vector library",
-     Authors = {
+     version = "1.2",
+     description = "A simple vector library",
+     authors = {
      	"3uclidian",
      },
+     lua_versions = {
+          "Lua 5.1",
+          "Lua 5.2",
+          "Lua 5.3"
+     }
 }
