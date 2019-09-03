@@ -5,8 +5,8 @@ Information{
      	"3uclidian",
      },
      lua_versions = {
-          "Lua 5.1",
-          "Lua 5.2",
-          "Lua 5.3"
-     }
+          ["Lua 5.3"] = true,
+          ["Lua 5.2"] = true,
+          ["Lua 5.1"] = true,
+     },
 }

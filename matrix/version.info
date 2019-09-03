@@ -1,0 +1,13 @@
+Information{
+     Version = "1",
+     Description = "A matrix library with some vector related methods for convenience",
+     Authors = {
+     	"3uclidian",
+     },
+     Lua_Versions = {
+          ["Lua 5.1"] = true,
+          ["Lua 5.2"] = true,
+          ["Lua 5.3"] = true,
+     },
+
+}

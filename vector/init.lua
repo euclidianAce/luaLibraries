@@ -14,7 +14,12 @@ function Information(t)
           P[ index ] = v
      end
 end
-dofile( _REQUIREDNAME.."/version.info" )
+local infoGot, errMsg = pcall(dofile, _REQUIREDNAME.."/version.info")
+if infoGot then
+     if not P["_LUA_VERSIONS"][ _VERSION ] then
+          error( _REQUIREDNAME..(" library not compatable with current Lua version (%s)"):format(_VERSION), 2 )
+     end
+end
 
 -- dependencies:
 local math = {
