@@ -1,6 +1,6 @@
 Information{
-     Version = "1",
-     Description = "A matrix library with some vector related methods for convenience",
+     Version = 1.1,
+     Description = "A simple matrix arithmetic library",
      Authors = {
      	"3uclidian",
      },
@@ -8,6 +8,7 @@ Information{
           ["Lua 5.1"] = true,
           ["Lua 5.2"] = true,
           ["Lua 5.3"] = true,
+          ["Lua 5.4"] = true,
      },
 
 }
