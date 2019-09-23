@@ -2,7 +2,15 @@
 --------------------------------------------------------------------------------------------------
 --   Implementation of the Aguilera-Perez Algorithm                                             --
 --   Aguilera, Antonio, and Ricardo Perez-Aguilera. "General n-dimensional rotations." (2004)   --
+--   http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.4.8662                             --
 --------------------------------------------------------------------------------------------------
+
+
+--
+--   Due to the implementation of the Aguilera-Perez Algorithm,
+--   all of these methods return a homogeneous matrix since we need
+--   to allow for translations to rotate about any axis
+--
 
 function translationMatrix( vector )
      local r, c = vector:getSize()
@@ -38,10 +46,10 @@ function mainRotationMatrix( dim, axis1, axis2, angle )
                     newMatrix[r][c] = math.cos(angle)
 
                elseif r == axis1 and c == axis2 then
-                    newMatrix[r][c] = math.sin(angle)
+                    newMatrix[r][c] = -math.sin(angle)
 
                elseif r == axis2 and c == axis1 then
-                    newMatrix[r][c] = -math.sin(angle)
+                    newMatrix[r][c] = math.sin(angle)
                end
 
           end
@@ -52,6 +60,7 @@ end
 
 
 function rotationMatrix( simplex, angle )
+     -- size of simplex determines the size of the matrix
 
      local simplexRows, n = simplex:getSize()
      local v, M, MInverse, tVec
@@ -78,10 +87,10 @@ function rotationMatrix( simplex, angle )
      -- the Algorithm
      for r = 2, n-1 do
           for c = n, r, -1 do
-               local Mk = mainRotationMatrix(n, c, c-1, math.atan2(v[r][c], v[r][c-1]) )
-               M = M * Mk
-               MInv = mainRotationMatrix(n, c-1, c, math.atan2(v[r][c], v[r][c-1]) ) * MInv
-               v = v * Mk
+               local Mk  = mainRotationMatrix(n, c,   c-1, math.atan2(v[r][c], v[r][c-1]) )
+               M         = M * Mk
+               MInv      = mainRotationMatrix(n, c-1, c,   math.atan2(v[r][c], v[r][c-1]) ) * MInv
+               v         = v * Mk
           end
      end
      

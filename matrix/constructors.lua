@@ -70,3 +70,13 @@ function identity( size )
      end
      return new( t, size )
 end
+
+function random( rows, columns )
+     if not columns then columns = rows end
+
+     local t = {}
+     for i = 1, rows*columns do
+          t[i] = math.random()-0.5
+     end
+     return new( t, rows )
+end

@@ -1,4 +1,4 @@
-local matrix = {} -- package
+local P = {} -- package
 
 local _REQUIREDNAME, packagePath = ...
 do
@@ -12,21 +12,22 @@ local version_info, errMsg = loadfile( packagePath.."/version.info", "t",
      Information = function(t)
           for i, v in pairs(t) do
                local index = "_"..i:upper()
-               matrix[ index ] = v
+               P[ index ] = v
           end
+          P._INFO_GOTTEN = true
      end
 })
 if not version_info then
      error( errMsg )
 end
 version_info()
-if not matrix._LUA_VERSIONS[ _VERSION ] then
+if not P._LUA_VERSIONS[ _VERSION ] then
      error( ("%s library not compatable with current Lua version (%s)"):format(_REQUIREDNAME, _VERSION) )
 end
 
 local auxillary = {
      constructors = {
-          "new", "zero", "identity",
+          "new", "zero", "identity", "random",
 
           dependencies = {
                "setmetatable","print","error",
@@ -46,7 +47,7 @@ local auxillary = {
 
           dependencies = {
                "ipairs", "table", "assert", "getmetatable", "type",
-               "string",
+               "string", "error", "print"
           }
      },
      iterators = {
@@ -75,7 +76,7 @@ for _, v in pairs(auxillary) do
 end
 
 
-return setmetatable(matrix, {
+return setmetatable(P, {
      __index = function(t, name)
           -- find the file that <name> is in
           local fileName
@@ -96,13 +97,13 @@ return setmetatable(matrix, {
                setmetatable(auxillary[fileName].dependencies,
                     {
                          __index = function(tab, key) -- allow access to the package
-                              if not matrix[ key ] then
+                              if not P[ key ] then
                                    error( key.." is not defined", 2 )
                               end
-                              return matrix[ key ]
+                              return P[ key ]
                          end,
                          __newindex = function(tab, key, value) -- catch all new global definitions and put them in the package
-                              t[ key ] = value
+                              P[ key ] = value
                          end
                     }
                ) 

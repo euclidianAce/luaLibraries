@@ -3,6 +3,13 @@ mt = { __metatable = "matrix" }
 mt.__index = {}
 local ind = mt.__index
 
+local function assertMetatable( obj, mtName, errMsg, errLayer )
+     if not getmetatable(obj) == mtName then
+          error( errMsg, errLayer )
+     end
+     return true
+end
+
 ----
 ---- getters
 ----
@@ -26,7 +33,7 @@ function ind:sameSize( other )
 end
 
 function ind:makeString( padding )
-     padding = padding or 1
+     padding = padding or 3
      local c = self:getColumns()
      local p = table.concat{"% .", padding, "f"}
      local strTable = {}
@@ -39,12 +46,15 @@ function ind:makeString( padding )
      return table.concat(strTable)
 end
 
-function ind:transpose()
-     local newMatrix = zero( self:getColumns(), self:getRows() )
-     for r, c, e in entries(self) do
-          newMatrix[c][r] = e
+mt.__tostring = mt.__index.makeString
+
+function ind:apply(func)
+     --applies func to each entry in the matrix
+     local t = {}
+     for r, c, e in entries( self ) do
+          table.insert(t, func(e))
      end
-     return newMatrix
+     return new(t, self:getRows())
 end
 
 ----
@@ -103,6 +113,11 @@ function mt:__mul( other )
           end
      else
           -- matrix matrix product
+          if self:getColumns() ~= other:getRows() then
+               print(self, "\n", other)
+               error("not correct size", 2)
+          end
+
           for i, row in rows(self) do
                for j, column in columns(other) do
                     table.insert(t, dot(row, column))
@@ -110,6 +125,16 @@ function mt:__mul( other )
           end
      end
 
+     return new(t, self:getRows())
+end
+
+function ind:schur( other )
+     -- component-wise multiplication
+     -- a.k.a. the Schur product
+     local t = {}
+     for r, c, e1, e2 in doubleEntries( self, other ) do
+          table.insert(t, e1*e2)
+     end
      return new(t, self:getRows())
 end
 
@@ -122,4 +147,29 @@ function mt:__div( other )
      return new(t, self:getRows())
 end
 
-mt.__tostring = mt.__index.makeString
+
+function ind:transpose()
+     local newMatrix = zero( self:getColumns(), self:getRows() )
+     for r, c, e in entries(self) do
+          newMatrix[c][r] = e
+     end
+     return newMatrix
+end
+
+function ind:magnitude()
+     -- if the matrix is a vector, give its magnitude
+     local sum = 0
+     for r, c, e in entries( self ) do
+          sum = sum+e^2
+     end
+     return math.sqrt(sum)
+end
+
+function ind:magnitudeSquared()
+     -- if the matrix is a vector, give its magnitude
+     local sum = 0
+     for r, c, e in entries( self ) do
+          sum = sum+e^2
+     end
+     return sum
+end
