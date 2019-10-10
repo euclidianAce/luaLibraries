@@ -1,0 +1,33 @@
+Auxiliary{
+     constructors = {
+          "new", "zero", "identity", "random",
+
+          dependencies = {
+               "setmetatable","print","error",
+               "type","ipairs","math","table",
+          }
+     },
+     rotation = {
+          "translationMatrix", "mainRotationMatrix",
+          "rotationMatrix",
+
+          dependencies = {
+               "math", "error"
+          }
+     },
+     metatable = {
+          "mt",
+
+          dependencies = {
+               "ipairs", "table", "assert", "getmetatable", "type",
+               "string", "error", "print"
+          }
+     },
+     iterators = {
+          "rows", "columns", "entries", "doubleEntries",
+
+          dependencies = {
+               "assert","table","coroutine"
+          }
+     }
+}
