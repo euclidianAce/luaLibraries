@@ -1,68 +1,75 @@
-
+local function getRow( M )
+	for i = 1, #M do
+		coroutine.yield(i, M[i])
+	end
+end
 function rows( M )
-     local row = 0
-     local r, c = #M, #M[1]
-     return    function()
-                    row = row+1
-                    if row > r then
-                         return nil
-                    end
-                    local rTable = {}
-                    for i = 1, c do
-                         table.insert(rTable, M[row][i])
-                    end
-                    return row, rTable
-               end
+	local co = coroutine.create(function() getRow(M) end)
+	return function()
+		local state, r, row = coroutine.resume(co)
+		return r, row
+	end
+
 end
 
+local function getColumn( M )
+	for i = 1, #M[1] do
+		-- make a new list with the contents of column i
+		local t = {}
+		for j = 1, #M do
+			t[#t + 1] = M[j][i]
+		end
+		coroutine.yield(i, t)
+	end
+end
 function columns( M )
-     local column = 0
-     local r, c = #M, #M[1]
-     return    function()
-                    column = column+1
-                    if column > c then
-                         return nil
-                    end
-                    local rTable = {}
-                    for i = 1, r do
-                         table.insert(rTable, M[i][column])
-                    end
-                    return column, rTable
-               end
+	local co = coroutine.create(function() getColumn(M) end)
+	return function()
+		local status, c, col = coroutine.resume(co)
+		return c, col
+	end
 end
 
+
+local function getEntries( M )
+	for i = 1, #M do
+		for j = 1, #M[1] do
+			coroutine.yield(i, j, M[i][j])
+		end
+	end
+end
 function entries( M )
-     local r, c = #M, #M[1]
-     local i, j = 1, 1
-     local row, column = 1, 0
-     return    function()
-                    column = column+1
-                    if column > c then
-                         column = 1
-                         row = row+1
-                         if row > r then
-                              return nil
-                         end
-                    end
-                    return row, column, M[row][column]
-               end
+	local co = coroutine.create(function() getEntries(M) end)
+	return function()
+		local status, r, c, e = coroutine.resume(co)
+		return r, c, e
+	end
+end
+function doubleEntries(M, N)
+	local coM = coroutine.create(function() getEntries(M) end)
+	local coN = coroutine.create(function() getEntries(N) end)
+	return function()
+		local _, _, _, eM = coroutine.resume(coM)
+		local _, r, c, eN = coroutine.resume(coN)
+		return r, c, eM, eN
+	end
 end
 
-function doubleEntries( M, N )
-     -- verify self and other are the same size
-     local r, c = #M, #M[1]
-
-     local i, j = 1, 1
-     local row, column = 1, 0
-     return    function()
-                    column = column+1
-                    if column > c then
-                         column = 1
-                         row = row+1
-                         if row > r then
-                              return nil
-                         end
-                    end
-                    return row, column, M[row][column], N[row][column]
-               end
+-- general entries function for any number of matrices
+function genEntries( ... )
+	local mTable = {...}
+	local threads = {}
+	for i = 1, #mTable do
+		threads[i] = coroutine.create(function() getEntries(mTable[i]) end)
+	end
+	return function()
+		local eTable = {}
+		local status, r, c
+		for i = 1, #threads do
+			status, r, c, eTable[ mTable[i] ] = coroutine.resume(threads[i])
+			-- each entry is indexed by the matrix that it's from
+		end
+		return r, c, eTable
+	end
 end
+

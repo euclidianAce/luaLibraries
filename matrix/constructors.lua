@@ -19,7 +19,6 @@ local function assertType( val, typeStr, errMsg, level )
 end
 
 function new( tab, rows )
-     -- tab is a list, rows is how many rows the matrix is
      -- tab can either be a list of lists or a one dimensional list with a number to denote when to go to the next row
 
      assertType(tab, "table")

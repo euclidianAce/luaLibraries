@@ -1,5 +1,5 @@
 Information{
-     Version = 1.1,
+     Version = 1.2,
      Description = "A simple matrix arithmetic library",
      Authors = {
           "3uclidian",
@@ -10,5 +10,5 @@ Information{
           ["Lua 5.3"] = true,
           ["Lua 5.4"] = true,
      },
-
+     dependencies = {},
 }

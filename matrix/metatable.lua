@@ -114,7 +114,6 @@ function mt:__mul( other )
      else
           -- matrix matrix product
           if self:getColumns() ~= other:getRows() then
-               print(self, "\n", other)
                error("not correct size", 2)
           end
 
